@@ -64,34 +64,47 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>28.2-jre</version>
-            <scope>compile</scope>
         </dependency>
-        <!-- SLF4J Libraries !-->
+        <!-- SLF4J Libraries -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.26</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.30</version>
-            <scope>compile</scope>
         </dependency>
         <!-- Apache Logging API Dependency -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.13.3</version>
-            <scope>compile</scope>
         </dependency>
-        <!-- Nukkit Protocol Library !-->
+        <!-- NukkitX Protocol Dependency -->
         <dependency>
             <groupId>com.nukkitx.protocol</groupId>
             <artifactId>bedrock-v408</artifactId>
             <version>2.6.0-SNAPSHOT</version>
-            <scope>compile</scope>
+        </dependency>
+        <!-- Google Json Simple Artifact -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <!-- fasterxml core Dependency -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.8</version>
+        </dependency>
+        <!-- fasterxml dataformat yaml Library -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>2.9.8</version>
         </dependency>
     </dependencies>
 
@@ -119,17 +132,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <artifactSet>
-                        <includes>
-                            <include>com.google.guava:guava</include>
-                            <include>org.slf4j:slf4j-api</include>
-                            <include>org.slf4j:slf4j-simple</include>
-                            <include>org.apache.logging.log4j:log4j-api</include>
-                            <include>com.nukkitx.protocol:bedrock-v408</include>
-                        </includes>
-                    </artifactSet>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <minimizeJar>false</minimizeJar>
+                    <minimizeJar>true</minimizeJar>
                 </configuration>
             </plugin>
             <plugin>

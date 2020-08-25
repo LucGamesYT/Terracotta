@@ -2,9 +2,9 @@ package org.terracotta.util.io;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +28,7 @@ public class FileCreationUtil {
     /**
      * Creates all essential directories for a Terracotta server
      */
+    @SneakyThrows
     public static void createDirectories() {
         final List<File> directories = new ArrayList<>();
         final String[] directoryNames = new String[]{"logs", "players", "plugins", "resource_packs", "worlds"};
@@ -49,6 +50,7 @@ public class FileCreationUtil {
     /**
      * Creates all essential files for a Terracotta server
      */
+    @SneakyThrows
     public static void createFiles() {
         final List<File> files = new ArrayList<>();
         final String[] fileNames = new String[]{
@@ -60,11 +62,7 @@ public class FileCreationUtil {
 
         for (final File file : files) {
             if (!file.exists()) {
-                try {
-                    file.createNewFile();
-                } catch (final IOException e) {
-                    e.printStackTrace();
-                }
+                file.createNewFile();
 
                 if (!FileCreationUtil.createdFiles.contains(file.getName())) {
                     FileCreationUtil.createdFiles.add(file.getName());
