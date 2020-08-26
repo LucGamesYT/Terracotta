@@ -1,9 +1,9 @@
 package org.terracotta.network;
 
 import com.nukkitx.protocol.bedrock.BedrockClient;
-import com.nukkitx.protocol.bedrock.BedrockPong;
-import com.nukkitx.protocol.bedrock.v408.Bedrock_v408;
+import com.nukkitx.protocol.bedrock.BedrockClientSession;
 import lombok.SneakyThrows;
+import org.terracotta.network.handler.BedrockClientPacketHandler;
 import org.terracotta.server.TerracottaServer;
 
 import java.net.InetSocketAddress;
@@ -20,29 +20,19 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Client {
 
-    private final BedrockClient bedrockClient;
     private final TerracottaServer server;
+    private final BedrockClient bedrockClient;
 
     /**
      * Creates a new Client
-     *
-     * @param server which is the server where the client should connect to
      */
     @SneakyThrows
     public Client(final TerracottaServer server) {
         this.server = server;
 
         this.bedrockClient = new BedrockClient(new InetSocketAddress("0.0.0.0", ThreadLocalRandom.current().nextInt(20000, 60000)));
+        this.bedrockClient.setRakNetVersion(10);
         this.bedrockClient.bind().join();
-    }
-
-    /**
-     * Retrieves the Pong data from the ping execution
-     *
-     * @return a fresh {@link BedrockPong}
-     */
-    public BedrockPong executePing() {
-        return this.bedrockClient.ping(this.server.getAddress()).join();
     }
 
     /**
@@ -55,9 +45,18 @@ public class Client {
                 return;
             }
 
-            bedrockClientSession.setPacketCodec(Bedrock_v408.V408_CODEC);
-            bedrockClientSession.setPacketHandler(new BedrockPacketHandler(this.server.getBedrockServerSession(), this.server.getBedrockServer()));
+            bedrockClientSession.setPacketCodec(ProtocolInfo.getPacketCodec());
+            bedrockClientSession.setPacketHandler(new BedrockClientPacketHandler(this.bedrockClient.getSession()));
         }).join();
+    }
+
+    /**
+     * Retrieves the current client session
+     *
+     * @return a fresh {@link BedrockClientSession}
+     */
+    public BedrockClientSession getSession() {
+        return this.bedrockClient.getSession();
     }
 
     /**

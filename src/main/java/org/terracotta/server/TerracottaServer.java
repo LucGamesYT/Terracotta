@@ -4,10 +4,10 @@ import com.nukkitx.protocol.bedrock.BedrockPong;
 import com.nukkitx.protocol.bedrock.BedrockServer;
 import com.nukkitx.protocol.bedrock.BedrockServerEventHandler;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import com.nukkitx.protocol.bedrock.v408.Bedrock_v408;
 import lombok.Data;
 import lombok.SneakyThrows;
-import org.terracotta.network.BedrockPacketHandler;
+import org.terracotta.network.ProtocolInfo;
+import org.terracotta.network.handler.BedrockServerPacketHandler;
 
 import java.net.InetSocketAddress;
 
@@ -32,14 +32,13 @@ public class TerracottaServer {
     private final InetSocketAddress address = new InetSocketAddress(this.hostname, this.port);
 
     private BedrockServer bedrockServer;
-    private BedrockServerSession bedrockServerSession;
 
     /**
      * Creates a new Terracotta Bedrock Edition server
      */
     @SneakyThrows
     public TerracottaServer() {
-        this.bedrockServer = new BedrockServer(new InetSocketAddress(this.hostname, this.port));
+        this.bedrockServer = new BedrockServer(this.address);
         final BedrockPong bedrockPong = new BedrockPong();
 
         bedrockPong.setEdition("MCPE");
@@ -47,7 +46,7 @@ public class TerracottaServer {
         bedrockPong.setPlayerCount(this.playerCount);
         bedrockPong.setMaximumPlayerCount(this.maxPlayerCount);
         bedrockPong.setGameType(this.defaultGameMode);
-        bedrockPong.setProtocolVersion(Bedrock_v408.V408_CODEC.getProtocolVersion());
+        bedrockPong.setProtocolVersion(ProtocolInfo.getProtocolVersion());
 
         this.bedrockServer.setHandler(new BedrockServerEventHandler() {
             @Override
@@ -62,14 +61,16 @@ public class TerracottaServer {
 
             @Override
             public void onSessionCreation(final BedrockServerSession serverSession) {
-                bedrockServerSession = serverSession;
                 serverSession.addDisconnectHandler(disconnectReason -> System.out.println("Session Disconnected"));
-                serverSession.setPacketHandler(new BedrockPacketHandler(serverSession, bedrockServer));
+                serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession, bedrockServer));
             }
         });
         this.bedrockServer.bind().join();
     }
 
+    /**
+     * Shutdown this Terracotta server
+     */
     public void close() {
         if (!this.bedrockServer.isClosed()) {
             this.bedrockServer.close();
