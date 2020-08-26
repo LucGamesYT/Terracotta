@@ -27,3 +27,16 @@ hs_err_pid*
 
 # Maven Build Tool target Folder
 /target/
+
+# Server related files
+logs
+players
+plugins
+resource_packs
+worlds
+banned-players-ip.json
+banned-players-name.json
+operators.json
+server.properties
+terracotta.yml
+whitelist.json
