@@ -22,8 +22,11 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# IntelliJ idea project Folder
+# IntelliJ IDEA project Folder
 .idea
+
+# IntelliJ IDEA iml file
+*.iml
 
 # Maven Build Tool target Folder
 /target/

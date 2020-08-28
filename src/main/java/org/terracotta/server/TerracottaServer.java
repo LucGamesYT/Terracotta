@@ -6,6 +6,7 @@ import com.nukkitx.protocol.bedrock.BedrockServerEventHandler;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import lombok.Data;
 import lombok.SneakyThrows;
+import org.terracotta.Terracotta;
 import org.terracotta.network.ProtocolInfo;
 import org.terracotta.network.handler.BedrockServerPacketHandler;
 
@@ -26,8 +27,8 @@ public class TerracottaServer {
     private final String hostname = "127.0.0.1";
     private final int port = 19132;
     private final String motd = "Terracotta Server v1.0.0";
-    private final int playerCount = 0;
-    private final int maxPlayerCount = 50;
+    private final int onlinePlayerSize = 0;
+    private final int maxPlayerSize = 50;
     private final String defaultGameMode = "Creative";
     private final InetSocketAddress address = new InetSocketAddress(this.hostname, this.port);
 
@@ -43,8 +44,8 @@ public class TerracottaServer {
 
         bedrockPong.setEdition("MCPE");
         bedrockPong.setMotd(this.motd);
-        bedrockPong.setPlayerCount(this.playerCount);
-        bedrockPong.setMaximumPlayerCount(this.maxPlayerCount);
+        bedrockPong.setPlayerCount(this.onlinePlayerSize);
+        bedrockPong.setMaximumPlayerCount(this.maxPlayerSize);
         bedrockPong.setGameType(this.defaultGameMode);
         bedrockPong.setProtocolVersion(ProtocolInfo.getProtocolVersion());
 
@@ -61,8 +62,13 @@ public class TerracottaServer {
 
             @Override
             public void onSessionCreation(final BedrockServerSession serverSession) {
-                serverSession.addDisconnectHandler(disconnectReason -> System.out.println("Session Disconnected"));
-                serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession, bedrockServer));
+                serverSession.addDisconnectHandler(disconnectReason -> {
+                    if (TerracottaServer.this.close()) {
+                        Terracotta.LOGGER.info("Server Session terminated! Server is shutting down...");
+                    }
+                });
+                serverSession.setPacketCodec(ProtocolInfo.getPacketCodec());
+                serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession, TerracottaServer.this.bedrockServer));
             }
         });
         this.bedrockServer.bind().join();
@@ -70,10 +76,14 @@ public class TerracottaServer {
 
     /**
      * Shutdown this Terracotta server
+     *
+     * @return @code true, when the shutdown executed successfully, otherwise @code false
      */
-    public void close() {
+    public boolean close() {
         if (!this.bedrockServer.isClosed()) {
             this.bedrockServer.close();
+            return true;
         }
+        return false;
     }
 }

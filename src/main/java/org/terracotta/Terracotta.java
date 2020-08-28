@@ -20,31 +20,29 @@ import java.io.InputStreamReader;
  */
 public class Terracotta {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(Terracotta.class);
     public static TerracottaServer SERVER;
 
     @SneakyThrows
     public static void main(final String[] args) {
-        final Logger logger = LoggerFactory.getLogger(Terracotta.class);
-
-        logger.info("Terracotta is starting up...");
-        logger.info("Creating Server files..");
+        LOGGER.info("Terracotta is starting up...");
+        LOGGER.info("Creating Server files..");
 
         FileCreationUtil.createDirectories();
         FileCreationUtil.createFiles();
 
-        logger.info(FileCreationUtil.getCreatedFiles().size() != 0 ? "Server files created. (" + String.join(", ", FileCreationUtil.getCreatedFiles()) + ")" : "Server files loaded.");
+        LOGGER.info(FileCreationUtil.getCreatedFiles().size() != 0 ? "Server files created. (" + String.join(", ", FileCreationUtil.getCreatedFiles()) + ")" : "Server files loaded.");
 
         SERVER = new TerracottaServer();
 
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
+        // just to keep the terminal alive as long as possible ...
         while (true) {
-            // just to keep the terminal alive as long as possible ...
             final String consoleMessage = bufferedReader.readLine();
 
-            if (consoleMessage.equalsIgnoreCase("stop")) {
-                SERVER.close();
-                logger.info("Server is shutting down...");
+            if (consoleMessage.equalsIgnoreCase("stop") && SERVER.close()) {
+                LOGGER.info("Server is shutting down...");
                 return;
             }
         }
