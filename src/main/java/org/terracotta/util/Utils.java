@@ -7,6 +7,7 @@ import com.nimbusds.jose.Payload;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.nukkitx.protocol.bedrock.util.EncryptionUtils;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import net.minidev.json.JSONObject;
 
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
  * @author Kaooot
  * @version 1.0
  */
+@NoArgsConstructor
 public class Utils {
 
     /**

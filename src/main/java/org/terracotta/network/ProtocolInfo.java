@@ -4,6 +4,7 @@ import com.nukkitx.protocol.bedrock.BedrockPacket;
 import com.nukkitx.protocol.bedrock.BedrockPacketCodec;
 import com.nukkitx.protocol.bedrock.v408.Bedrock_v408;
 import io.netty.buffer.ByteBuf;
+import lombok.NoArgsConstructor;
 
 /**
  * Copyright (c) 2020, TerracottaMC and Kaooot
@@ -14,6 +15,7 @@ import io.netty.buffer.ByteBuf;
  * @author Kaooot
  * @version 1.0
  */
+@NoArgsConstructor
 public class ProtocolInfo {
 
     private static final BedrockPacketCodec currentCodec = Bedrock_v408.V408_CODEC;

@@ -2,6 +2,7 @@ package org.terracotta.util.concurrent;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
+import lombok.NoArgsConstructor;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -16,6 +17,7 @@ import java.util.concurrent.Executors;
  * @author Kaooot
  * @version 1.0
  */
+@NoArgsConstructor
 public class ExecutorServiceProvider implements IExecutorServiceProvider {
 
     private ExecutorService service;

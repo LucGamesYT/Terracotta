@@ -22,8 +22,6 @@ import io.netty.util.AsciiString;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.minidev.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terracotta.Terracotta;
 import org.terracotta.network.Client;
 import org.terracotta.network.ProtocolInfo;
@@ -45,8 +43,6 @@ import java.util.UUID;
  */
 @RequiredArgsConstructor
 public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler {
-
-    private final Logger logger = LoggerFactory.getLogger(BedrockServerPacketHandler.class);
 
     private final BedrockServerSession serverSession;
     private final BedrockServer bedrockServer;
@@ -81,7 +77,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         final boolean validChain = this.validateChainData(certificateChainData);
 
         if (!validChain) {
-            this.logger.warn("Could not validate the chainData of an incoming connection");
+            Terracotta.LOGGER.warn("Could not validate the chainData of an incoming connection");
             return false;
         }
 
@@ -94,7 +90,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         final boolean verified = this.verifyJwt(clientJwt, identityPublicKey);
 
         if (!verified) {
-            this.logger.warn("Could not verify the identityPublicKey of an incoming connection");
+            Terracotta.LOGGER.warn("Could not verify the identityPublicKey of an incoming connection");
             return false;
         }
 
@@ -120,7 +116,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
 
         this.serverSession.sendPacket(resourcePacksInfo);
 
-        this.logger.info(displayName + " logged in with entityId " + entityRuntimeId + " [uniqueId: " + uniqueId + "]");
+        Terracotta.LOGGER.info(displayName + " logged in with entityId " + entityRuntimeId + " [uniqueId: " + uniqueId + "]");
 
         // Throws a TimeoutException TODO: figure out why
         final Client client = new Client(Terracotta.SERVER);
@@ -150,7 +146,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         clientSession.setBatchHandler(playerSession.getDownstreamBatchHandler());
         clientSession.setLogging(true);
 
-        this.logger.info("Client connected");
+        Terracotta.LOGGER.info("Client connected");
 
         this.loginHandled = true;
         return true;
