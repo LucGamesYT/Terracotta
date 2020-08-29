@@ -31,6 +31,7 @@ public class TerracottaServer {
     private final int maxPlayerSize = 50;
     private final String defaultGameMode = "Creative";
     private final InetSocketAddress address = new InetSocketAddress(this.hostname, this.port);
+    private final int maxEntitiesSize = this.maxPlayerSize + 100;
 
     private BedrockServer bedrockServer;
 

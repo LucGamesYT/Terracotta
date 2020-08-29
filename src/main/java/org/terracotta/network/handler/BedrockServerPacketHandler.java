@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.minidev.json.JSONObject;
 import org.terracotta.Terracotta;
+import org.terracotta.entity.Entities;
 import org.terracotta.network.Client;
 import org.terracotta.network.ProtocolInfo;
 import org.terracotta.network.session.AuthData;
@@ -97,7 +98,21 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         final String displayName = extraData.getAsString("displayName");
         final String uniqueId = extraData.getAsString("identity");
         final String xuid = extraData.getAsString("XUID");
-        final int entityRuntimeId = 1; // TODO: Change later
+
+        int entityRuntimeId = -1;
+
+        for (int i = 0; i < Terracotta.SERVER.getMaxEntitiesSize(); i++) {
+            if (!Entities.isRuntimeIdUsed(i)) {
+                entityRuntimeId = i;
+                Entities.addUsedRuntimeId(i);
+                break;
+            }
+        }
+
+        if (entityRuntimeId == -1) {
+            Terracotta.LOGGER.warn("Could not create entityRuntimeId for an incoming connection");
+            return false;
+        }
 
         final PlayStatusPacket status = new PlayStatusPacket();
         status.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);

@@ -1,5 +1,6 @@
 package org.terracotta;
 
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.terracotta.server.TerracottaServer;
 import org.terracotta.util.io.FileCreationUtil;
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
  * @author Kaooot
  * @version 1.0
  */
+@NoArgsConstructor
 public class Terracotta {
 
     public static final Logger LOGGER = new Logger();
@@ -41,6 +43,7 @@ public class Terracotta {
             final String consoleMessage = bufferedReader.readLine();
 
             if (consoleMessage.equalsIgnoreCase("stop") && SERVER.close()) {
+                bufferedReader.close();
                 LOGGER.info("Server is shutting down...");
                 return;
             }
