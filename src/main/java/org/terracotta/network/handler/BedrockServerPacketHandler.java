@@ -11,7 +11,6 @@ import com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory;
 import com.nimbusds.jwt.SignedJWT;
 import com.nukkitx.math.vector.Vector3f;
 import com.nukkitx.protocol.bedrock.BedrockClientSession;
-import com.nukkitx.protocol.bedrock.BedrockServer;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
 import com.nukkitx.protocol.bedrock.packet.LoginPacket;
 import com.nukkitx.protocol.bedrock.packet.PlayStatusPacket;
@@ -46,17 +45,10 @@ import java.util.UUID;
 public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.handler.BedrockPacketHandler {
 
     private final BedrockServerSession serverSession;
-    private final BedrockServer bedrockServer;
-
-    // TODO: Change later
-    private boolean loginHandled = false;
 
     @SneakyThrows
     @Override
     public boolean handle(final LoginPacket packet) {
-        if (this.loginHandled) {
-            return false;
-        }
 
         final int protocolVersion = packet.getProtocolVersion();
 
@@ -101,7 +93,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
 
         int entityRuntimeId = -1;
 
-        for (int i = 0; i < Terracotta.SERVER.getMaxEntitiesSize(); i++) {
+        for (int i = 1; i < Terracotta.server.getMaxEntitiesSize(); i++) {
             if (!Entities.isRuntimeIdUsed(i)) {
                 entityRuntimeId = i;
                 Entities.addUsedRuntimeId(i);
@@ -133,12 +125,10 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
 
         Terracotta.LOGGER.info(displayName + " logged in with entityId " + entityRuntimeId + " [uniqueId: " + uniqueId + "]");
 
-        // Throws a TimeoutException TODO: figure out why
-        final Client client = new Client(Terracotta.SERVER);
+        final Client client = new Client(Terracotta.server);
         client.connect();
 
         final BedrockClientSession clientSession = client.getSession();
-
         final PlayerSession playerSession = new PlayerSession(this.serverSession, clientSession, new AuthData(displayName, UUID.fromString(uniqueId), xuid));
         final LoginPacket loginPacket = new LoginPacket();
 
@@ -162,8 +152,6 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         clientSession.setLogging(true);
 
         Terracotta.LOGGER.info("Client connected");
-
-        this.loginHandled = true;
         return true;
     }
 

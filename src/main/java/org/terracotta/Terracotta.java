@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 public class Terracotta {
 
     public static final Logger LOGGER = new Logger();
-    public static TerracottaServer SERVER;
+    public static TerracottaServer server;
 
     @SneakyThrows
     public static void main(final String[] args) {
@@ -34,7 +34,7 @@ public class Terracotta {
 
         LOGGER.info(FileCreationUtil.getCreatedFiles().size() != 0 ? "Server files created. (" + String.join(", ", FileCreationUtil.getCreatedFiles()) + ")" : "Server files loaded.");
 
-        SERVER = new TerracottaServer();
+        server = new TerracottaServer();
 
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -42,7 +42,7 @@ public class Terracotta {
         while (true) {
             final String consoleMessage = bufferedReader.readLine();
 
-            if (consoleMessage.equalsIgnoreCase("stop") && SERVER.close()) {
+            if (consoleMessage.equalsIgnoreCase("stop") && server.close()) {
                 bufferedReader.close();
                 LOGGER.info("Server is shutting down...");
                 return;

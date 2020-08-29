@@ -31,7 +31,7 @@ public class TerracottaServer {
     private final int maxPlayerSize = 50;
     private final String defaultGameMode = "Creative";
     private final InetSocketAddress address = new InetSocketAddress(this.hostname, this.port);
-    private final int maxEntitiesSize = this.maxPlayerSize + 100;
+    private final int maxEntitiesSize = this.maxPlayerSize + 101;
 
     private BedrockServer bedrockServer;
 
@@ -64,12 +64,12 @@ public class TerracottaServer {
             @Override
             public void onSessionCreation(final BedrockServerSession serverSession) {
                 serverSession.addDisconnectHandler(disconnectReason -> {
-                    if (TerracottaServer.this.close()) {
+                    if (bedrockServer.isClosed()) {
                         Terracotta.LOGGER.info("Server Session terminated! Server is shutting down...");
                     }
                 });
                 serverSession.setPacketCodec(ProtocolInfo.getPacketCodec());
-                serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession, TerracottaServer.this.bedrockServer));
+                serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession));
             }
         });
         this.bedrockServer.bind().join();

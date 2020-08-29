@@ -3,6 +3,7 @@ package org.terracotta.network;
 import com.nukkitx.protocol.bedrock.BedrockClient;
 import com.nukkitx.protocol.bedrock.BedrockClientSession;
 import lombok.SneakyThrows;
+import org.terracotta.Terracotta;
 import org.terracotta.network.handler.BedrockClientPacketHandler;
 import org.terracotta.server.TerracottaServer;
 
@@ -39,15 +40,18 @@ public class Client {
      * Builds a new connection to the Server data given in the constructor of this class
      */
     public void connect() {
-        this.bedrockClient.connect(this.server.getAddress()).whenComplete((bedrockClientSession, throwable) -> {
+        this.bedrockClient.directConnect(this.server.getAddress()).whenComplete((bedrockClientSession, throwable) -> {
             if (throwable != null) {
-                throwable.printStackTrace();
                 return;
             }
 
+            bedrockClientSession.addDisconnectHandler(disconnectReason -> {
+                this.close();
+                Terracotta.LOGGER.info(this.bedrockClient.getBindAddress().getHostName() + ":" + this.bedrockClient.getBindAddress().getPort() + " logged out with reason: " + disconnectReason.name().toLowerCase().replace("_", ""));
+            });
             bedrockClientSession.setPacketCodec(ProtocolInfo.getPacketCodec());
-            bedrockClientSession.setPacketHandler(new BedrockClientPacketHandler(this.bedrockClient.getSession()));
-        }).join();
+            bedrockClientSession.setPacketHandler(new BedrockClientPacketHandler(this.getSession()));
+        });
     }
 
     /**
@@ -63,6 +67,8 @@ public class Client {
      * Closes the client-side connection to the server
      */
     public void close() {
-        this.bedrockClient.close();
+        if (!this.getSession().isClosed()) {
+            this.bedrockClient.close();
+        }
     }
 }
