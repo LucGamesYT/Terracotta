@@ -72,7 +72,7 @@ public class TerracottaServer {
                 serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession));
             }
         });
-        this.bedrockServer.bind().join();
+        this.bedrockServer.bind();
     }
 
     /**
