@@ -49,9 +49,9 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
     @SneakyThrows
     @Override
     public boolean handle(final LoginPacket packet) {
-
         final int protocolVersion = packet.getProtocolVersion();
 
+        // check for compatible protocol version
         if (protocolVersion != ProtocolInfo.getProtocolVersion()) {
             final PlayStatusPacket playStatusPacket = new PlayStatusPacket();
 
@@ -69,6 +69,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
 
         final boolean validChain = this.validateChainData(certificateChainData);
 
+        // check whether chain data is valid
         if (!validChain) {
             Terracotta.LOGGER.warn("Could not validate the chainData of an incoming connection");
             return false;
@@ -82,6 +83,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
 
         final boolean verified = this.verifyJwt(clientJwt, identityPublicKey);
 
+        // check whether the identityPublicKey is valid
         if (!verified) {
             Terracotta.LOGGER.warn("Could not verify the identityPublicKey of an incoming connection");
             return false;
@@ -101,6 +103,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
             }
         }
 
+        // check if entityRuntimeId could be given to the incoming player connection
         if (entityRuntimeId == -1) {
             Terracotta.LOGGER.warn("Could not create entityRuntimeId for an incoming connection");
             return false;
@@ -152,9 +155,17 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         clientSession.setLogging(true);
 
         Terracotta.LOGGER.info("Client connected");
+
         return true;
     }
 
+    /**
+     * Validates the given {@link JsonNode} chain data
+     *
+     * @param data which should be validated
+     *
+     * @return true, when the chain data could be verified, otherwise false
+     */
     @SneakyThrows
     private boolean validateChainData(final JsonNode data) {
         ECPublicKey lastKey = null;
@@ -182,6 +193,14 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         return validChain;
     }
 
+    /**
+     * Verifies the given {@link JWSObject} header and the given {@link ECPublicKey}
+     *
+     * @param jwt       data, which should be verified
+     * @param publicKey key, which should be verified
+     *
+     * @return whether the data could be verified
+     */
     @SneakyThrows
     private boolean verifyJwt(final JWSObject jwt, final ECPublicKey publicKey) {
         return jwt.verify(new DefaultJWSVerifierFactory().createJWSVerifier(jwt.getHeader(), publicKey));

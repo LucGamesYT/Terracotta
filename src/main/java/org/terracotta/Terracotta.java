@@ -2,6 +2,7 @@ package org.terracotta;
 
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import org.terracotta.network.ProtocolInfo;
 import org.terracotta.server.TerracottaServer;
 import org.terracotta.util.io.FileCreationUtil;
 import org.terracotta.util.logging.Logger;
@@ -35,6 +36,8 @@ public class Terracotta {
         LOGGER.info(FileCreationUtil.getCreatedFiles().size() != 0 ? "Server files created. (" + String.join(", ", FileCreationUtil.getCreatedFiles()) + ")" : "Server files loaded.");
 
         server = new TerracottaServer();
+
+        LOGGER.info("This Terracotta server is running at v" + ProtocolInfo.getMinecraftVersion() + " (Protocol " + ProtocolInfo.getProtocolVersion() + ")");
 
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
