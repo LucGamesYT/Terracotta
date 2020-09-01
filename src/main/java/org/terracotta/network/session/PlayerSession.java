@@ -56,7 +56,7 @@ public class PlayerSession {
     }
 
     @RequiredArgsConstructor
-    private class BatchHandler implements com.nukkitx.protocol.bedrock.handler.BatchHandler {
+    private static class BatchHandler implements com.nukkitx.protocol.bedrock.handler.BatchHandler {
 
         private final BedrockSession session;
 

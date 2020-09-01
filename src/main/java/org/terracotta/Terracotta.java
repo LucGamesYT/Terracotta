@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import org.terracotta.network.ProtocolInfo;
 import org.terracotta.server.TerracottaServer;
 import org.terracotta.util.io.FileCreationUtil;
-import org.terracotta.util.logging.MainLogger;
+import org.terracotta.console.logging.MainLogger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

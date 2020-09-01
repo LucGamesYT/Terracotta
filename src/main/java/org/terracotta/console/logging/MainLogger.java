@@ -1,4 +1,4 @@
-package org.terracotta.util.logging;
+package org.terracotta.console.logging;
 
 import lombok.NoArgsConstructor;
 import org.apache.logging.log4j.LogManager;
