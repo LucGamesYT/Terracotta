@@ -38,7 +38,7 @@ plugins
 resource_packs
 worlds
 banned-players-ip.json
-banned-players-name.json
+banned-players.json
 operators.json
 server.properties
 terracotta.yml

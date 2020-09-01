@@ -11,6 +11,7 @@ import org.terracotta.network.ProtocolInfo;
 import org.terracotta.network.handler.BedrockServerPacketHandler;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.CompletionException;
 
 /**
  * Copyright (c) 2020, TerracottaMC and Kaooot
@@ -41,38 +42,44 @@ public class TerracottaServer {
     @SneakyThrows
     public TerracottaServer() {
         this.bedrockServer = new BedrockServer(this.address);
-        final BedrockPong bedrockPong = new BedrockPong();
 
-        bedrockPong.setEdition("MCPE");
-        bedrockPong.setMotd(this.motd);
-        bedrockPong.setPlayerCount(this.onlinePlayerSize);
-        bedrockPong.setMaximumPlayerCount(this.maxPlayerSize);
-        bedrockPong.setGameType(this.defaultGameMode);
-        bedrockPong.setProtocolVersion(ProtocolInfo.getProtocolVersion());
+        try {
+            final BedrockPong bedrockPong = new BedrockPong();
 
-        this.bedrockServer.setHandler(new BedrockServerEventHandler() {
-            @Override
-            public boolean onConnectionRequest(final InetSocketAddress address) {
-                return true;
-            }
+            bedrockPong.setEdition("MCPE");
+            bedrockPong.setMotd(this.motd);
+            bedrockPong.setPlayerCount(this.onlinePlayerSize);
+            bedrockPong.setMaximumPlayerCount(this.maxPlayerSize);
+            bedrockPong.setGameType(this.defaultGameMode);
+            bedrockPong.setProtocolVersion(ProtocolInfo.getProtocolVersion());
 
-            @Override
-            public BedrockPong onQuery(final InetSocketAddress address) {
-                return bedrockPong;
-            }
+            this.bedrockServer.setHandler(new BedrockServerEventHandler() {
+                @Override
+                public boolean onConnectionRequest(final InetSocketAddress address) {
+                    return true;
+                }
 
-            @Override
-            public void onSessionCreation(final BedrockServerSession serverSession) {
-                serverSession.addDisconnectHandler(disconnectReason -> {
-                    if (bedrockServer.isClosed()) {
-                        Terracotta.LOGGER.info("Server Session terminated! Server is shutting down...");
-                    }
-                });
-                serverSession.setPacketCodec(ProtocolInfo.getPacketCodec());
-                serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession));
-            }
-        });
-        this.bedrockServer.bind();
+                @Override
+                public BedrockPong onQuery(final InetSocketAddress address) {
+                    return bedrockPong;
+                }
+
+                @Override
+                public void onSessionCreation(final BedrockServerSession serverSession) {
+                    serverSession.addDisconnectHandler(disconnectReason -> {
+                        if (bedrockServer.isClosed()) {
+                            Terracotta.LOGGER.info("Server Session terminated! Server is shutting down...");
+                        }
+                    });
+                    serverSession.setPacketCodec(ProtocolInfo.getPacketCodec());
+                    serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession));
+                }
+            });
+            this.bedrockServer.bind();
+        } catch (final CompletionException e) {
+            Terracotta.LOGGER.error("Failed to bind to " + this.address.getHostName() + ":" + this.address.getPort());
+            Terracotta.LOGGER.warn("Perhaps another instance is already running on that port?");
+        }
     }
 
     /**

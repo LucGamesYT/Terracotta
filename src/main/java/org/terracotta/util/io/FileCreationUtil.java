@@ -54,7 +54,7 @@ public class FileCreationUtil {
     public static void createFiles() {
         final List<File> files = new ArrayList<>();
         final String[] fileNames = new String[]{
-                "banned-players-ip.json", "banned-players-name.json", "operators.json",
+                "banned-players-ip.json", "banned-players.json", "operators.json",
                 "whitelist.json", "server.properties", "terracotta.yml"
         };
 
