@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import org.terracotta.network.ProtocolInfo;
 import org.terracotta.server.TerracottaServer;
 import org.terracotta.util.io.FileCreationUtil;
-import org.terracotta.util.logging.Logger;
+import org.terracotta.util.logging.MainLogger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 @NoArgsConstructor
 public class Terracotta {
 
-    public static final Logger LOGGER = new Logger();
+    public static final MainLogger LOGGER = new MainLogger();
     public static TerracottaServer server;
 
     @SneakyThrows
