@@ -1,4 +1,4 @@
-package org.terracotta.util.logging;
+package org.terracotta.console.logging;
 
 /**
  * Copyright (c) 2020, TerracottaMC and Kaooot
