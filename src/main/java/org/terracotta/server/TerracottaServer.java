@@ -75,8 +75,8 @@ public class TerracottaServer {
                     serverSession.setPacketHandler(new BedrockServerPacketHandler(serverSession));
                 }
             });
-            this.bedrockServer.bind();
-        } catch (final CompletionException e) {
+            this.bedrockServer.bind().join();
+        } catch (final CompletionException ignored) {
             Terracotta.LOGGER.error("Failed to bind to " + this.address.getHostName() + ":" + this.address.getPort());
             Terracotta.LOGGER.warn("Perhaps another instance is already running on that port?");
         }

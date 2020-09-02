@@ -33,7 +33,7 @@ public class Client {
 
         this.bedrockClient = new BedrockClient(new InetSocketAddress("0.0.0.0", ThreadLocalRandom.current().nextInt(20000, 60000)));
         this.bedrockClient.setRakNetVersion(10);
-        this.bedrockClient.bind();
+        this.bedrockClient.bind().join();
     }
 
     /**
