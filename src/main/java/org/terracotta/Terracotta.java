@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 public class Terracotta {
 
     public static final MainLogger LOGGER = new MainLogger();
+
     public static TerracottaServer server;
 
     @SneakyThrows
