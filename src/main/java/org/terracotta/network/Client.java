@@ -4,6 +4,7 @@ import com.nukkitx.protocol.bedrock.BedrockClient;
 import com.nukkitx.protocol.bedrock.BedrockClientSession;
 import lombok.SneakyThrows;
 import org.terracotta.Terracotta;
+import org.terracotta.entity.Entities;
 import org.terracotta.network.handler.BedrockClientPacketHandler;
 import org.terracotta.server.TerracottaServer;
 
@@ -38,14 +39,18 @@ public class Client {
 
     /**
      * Builds a new connection to the Server data given in the constructor of this class
+     *
+     * @param entityRuntimeId the runtime id of that client
      */
-    public void connect() {
+    public void connect(final int entityRuntimeId) {
         this.bedrockClient.directConnect(this.server.getAddress()).whenComplete((bedrockClientSession, throwable) -> {
             if (throwable != null) {
                 return;
             }
 
             bedrockClientSession.addDisconnectHandler(disconnectReason -> {
+                // TODO: will be moved later
+                Entities.releaseRuntimeId(entityRuntimeId);
                 this.close();
                 Terracotta.LOGGER.info(this.bedrockClient.getBindAddress().getHostName() + ":" + this.bedrockClient.getBindAddress().getPort() + " logged out with reason: " + disconnectReason.name().toLowerCase().replace("_", ""));
             });

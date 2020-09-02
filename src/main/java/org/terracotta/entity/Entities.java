@@ -21,7 +21,7 @@ public class Entities {
     }
 
     public static void releaseRuntimeId(final int runtimeId) {
-        Entities.usedRuntimeIds.remove(runtimeId);
+        Entities.usedRuntimeIds.remove(runtimeId - 1);
     }
 
     public static boolean isRuntimeIdUsed(final int runtimeId) {

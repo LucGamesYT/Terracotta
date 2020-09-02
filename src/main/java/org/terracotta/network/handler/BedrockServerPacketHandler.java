@@ -129,7 +129,7 @@ public class BedrockServerPacketHandler implements com.nukkitx.protocol.bedrock.
         Terracotta.LOGGER.info(displayName + " logged in with entityId " + entityRuntimeId + " [uniqueId: " + uniqueId + "]");
 
         final Client client = new Client(Terracotta.server);
-        client.connect();
+        client.connect(entityRuntimeId);
 
         final BedrockClientSession clientSession = client.getSession();
         final PlayerSession playerSession = new PlayerSession(this.serverSession, clientSession, new AuthData(displayName, UUID.fromString(uniqueId), xuid));
