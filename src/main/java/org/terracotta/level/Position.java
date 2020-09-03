@@ -85,8 +85,8 @@ public class Position implements Vector3, Comparable<Position>, Serializable, Cl
 
     @Override
     public boolean equals(final Object other) {
-        // null acceptance | check for the right type | identical types
-        if (other == null || !other.getClass().equals(Position.class) || this.getClass() != other.getClass()) {
+        // null acceptance | identical types
+        if (other == null || !this.getClass().equals(other.getClass())) {
             return false;
         }
 
@@ -98,6 +98,6 @@ public class Position implements Vector3, Comparable<Position>, Serializable, Cl
     }
 
     private float lengthSquared() {
-        return this.x * this.x + this.y + this.y + this.z * this.z;
+        return this.x * this.x + this.y * this.y + this.z * this.z;
     }
 }
