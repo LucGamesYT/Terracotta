@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * Copyright (c) 2020, TerracottaMC and Kaooot
@@ -67,6 +65,44 @@ public class FileCreationUtil {
                 if (!FileCreationUtil.createdFiles.contains(file.getName())) {
                     FileCreationUtil.createdFiles.add(file.getName());
                 }
+            }
+
+            // writes default data to the current file
+            switch (file.getName()) {
+                case "server.properties":
+                    final Properties properties = new Properties();
+                    final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+
+                    properties.load(bufferedReader);
+
+                    int notNullProperties = 0;
+
+                    for (final String property : new String[]{"ip", "port", "motd", "maxPlayers", "defaultGameMode"}) {
+                        if (properties.getProperty(property) != null) {
+                            notNullProperties++;
+                        }
+                    }
+
+                    if (notNullProperties == 5) {
+                        bufferedReader.close();
+                        return;
+                    }
+
+                    try (final FileWriter fileWriter = new FileWriter(file)) {
+                        FileDataManager.createDefaultData(ServerFile.PROPERTIES_SERVER);
+
+                        final StringBuilder contentsBuilder = new StringBuilder();
+
+                        for (final Map.Entry entry : FileDataManager.getEntriesFromFile(ServerFile.PROPERTIES_SERVER)) {
+                            contentsBuilder.append(entry.getKey()).append(" = ").append(entry.getValue()).append("\n");
+                        }
+
+                        fileWriter.write(contentsBuilder.toString());
+                        fileWriter.flush();
+                    } catch (final IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
             }
         }
         files.clear();

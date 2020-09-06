@@ -4,11 +4,13 @@ import com.nukkitx.protocol.bedrock.BedrockPong;
 import com.nukkitx.protocol.bedrock.BedrockServer;
 import com.nukkitx.protocol.bedrock.BedrockServerEventHandler;
 import com.nukkitx.protocol.bedrock.BedrockServerSession;
-import lombok.Data;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.terracotta.Terracotta;
 import org.terracotta.network.ProtocolInfo;
 import org.terracotta.network.handler.BedrockServerPacketHandler;
+import org.terracotta.util.io.FileDataManager;
+import org.terracotta.util.io.ServerFile;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.CompletionException;
@@ -22,17 +24,24 @@ import java.util.concurrent.CompletionException;
  * @author Kaooot
  * @version 1.0
  */
-@Data
 public class TerracottaServer {
 
-    private final String hostname = "127.0.0.1";
-    private final int port = 19132;
-    private final String motd = "Terracotta Server v1.0.0";
+    @Getter
+    private final String hostname;
+    @Getter
+    private final int port;
+    @Getter
+    private final String motd;
+    @Getter
+    private final int maxPlayerSize;
+    @Getter
+    private final int defaultGameMode;
+    @Getter
+    private InetSocketAddress address;
+    @Getter
+    private final int maxEntitiesSize;
+
     private final int onlinePlayerSize = 0;
-    private final int maxPlayerSize = 50;
-    private final String defaultGameMode = "Creative";
-    private final InetSocketAddress address = new InetSocketAddress(this.hostname, this.port);
-    private final int maxEntitiesSize = this.maxPlayerSize + 101;
 
     private BedrockServer bedrockServer;
 
@@ -41,6 +50,14 @@ public class TerracottaServer {
      */
     @SneakyThrows
     public TerracottaServer() {
+        this.hostname = (String) FileDataManager.getProperty(ServerFile.PROPERTIES_SERVER, "ip");
+        this.port = Integer.parseInt((String) FileDataManager.getProperty(ServerFile.PROPERTIES_SERVER, "port"));
+        this.motd = (String) FileDataManager.getProperty(ServerFile.PROPERTIES_SERVER, "motd");
+        this.maxPlayerSize = Integer.parseInt((String) FileDataManager.getProperty(ServerFile.PROPERTIES_SERVER, "maxPlayers"));
+        this.defaultGameMode = Integer.parseInt((String) FileDataManager.getProperty(ServerFile.PROPERTIES_SERVER, "defaultGameMode"));
+        this.address = new InetSocketAddress(this.hostname, this.port);
+        this.maxEntitiesSize = this.maxPlayerSize + 101;
+
         this.bedrockServer = new BedrockServer(this.address);
 
         try {
@@ -50,7 +67,22 @@ public class TerracottaServer {
             bedrockPong.setMotd(this.motd);
             bedrockPong.setPlayerCount(this.onlinePlayerSize);
             bedrockPong.setMaximumPlayerCount(this.maxPlayerSize);
-            bedrockPong.setGameType(this.defaultGameMode);
+
+            switch (this.defaultGameMode) {
+                case 0:
+                    bedrockPong.setGameType("Survival");
+                    break;
+                case 1:
+                    bedrockPong.setGameType("Creative");
+                    break;
+                case 2:
+                    bedrockPong.setGameType("Adventure");
+                    break;
+                case 3:
+                    bedrockPong.setGameType("Spectator");
+                    break;
+            }
+
             bedrockPong.setProtocolVersion(ProtocolInfo.getProtocolVersion());
 
             this.bedrockServer.setHandler(new BedrockServerEventHandler() {
