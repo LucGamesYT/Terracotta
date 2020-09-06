@@ -19,7 +19,7 @@ public class VectorCompressor {
      *
      * @param vector3f which should be compressed
      *
-     * @return a fresh {@link com.nukkitx.math.vector.Vector3f}
+     * @return a fresh {@link org.terracotta.level.Vector3f}
      */
     public static Vector3f compressFromProtocolVector(final com.nukkitx.math.vector.Vector3f vector3f) {
         return new Vector3f(vector3f.getX(), vector3f.getY(), vector3f.getZ());
