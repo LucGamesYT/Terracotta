@@ -37,13 +37,13 @@ public class TerracottaServer {
     @Getter
     private final int defaultGameMode;
     @Getter
-    private InetSocketAddress address;
+    private final InetSocketAddress address;
     @Getter
     private final int maxEntitiesSize;
 
     private final int onlinePlayerSize = 0;
 
-    private BedrockServer bedrockServer;
+    private final BedrockServer bedrockServer;
 
     /**
      * Creates a new Terracotta Bedrock Edition server
