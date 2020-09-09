@@ -93,7 +93,7 @@ public class FileCreationUtil {
 
                         final StringBuilder contentsBuilder = new StringBuilder();
 
-                        for (final Map.Entry entry : FileDataManager.getEntriesFromFile(ServerFile.PROPERTIES_SERVER)) {
+                        for (final Map.Entry<String, Object> entry : FileDataManager.getEntriesFromFile(ServerFile.PROPERTIES_SERVER)) {
                             contentsBuilder.append(entry.getKey()).append(" = ").append(entry.getValue()).append("\n");
                         }
 
