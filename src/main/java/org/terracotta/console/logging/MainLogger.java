@@ -40,6 +40,6 @@ public class MainLogger implements ILogger {
 
     @Override
     public void dev(final String s) {
-        LOGGER.info("§7[§aDEVELOPMENT§7]§f (Thread: " + Thread.currentThread().getName() + ")  " + s);
+        LOGGER.info("§7[§5DEVELOPMENT§7]§f (Thread: " + Thread.currentThread().getName() + ")  " + s);
     }
 }

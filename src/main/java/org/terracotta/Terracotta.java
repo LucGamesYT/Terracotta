@@ -2,10 +2,11 @@ package org.terracotta;
 
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
+import org.terracotta.console.logging.MainLogger;
 import org.terracotta.network.ProtocolInfo;
 import org.terracotta.server.TerracottaServer;
+import org.terracotta.util.concurrent.array.AsyncArray;
 import org.terracotta.util.io.FileCreationUtil;
-import org.terracotta.console.logging.MainLogger;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -39,6 +40,24 @@ public class Terracotta {
         server = new TerracottaServer();
 
         LOGGER.info("This Terracotta server is running at v" + ProtocolInfo.getMinecraftVersion() + " (Protocol " + ProtocolInfo.getProtocolVersion() + ")");
+
+        LOGGER.dev("--- Array Tests ---");
+
+        final AsyncArray<Integer> array = new AsyncArray<>();
+
+        LOGGER.dev("Default Length: " + array.getLength());
+
+        array.set(5, 505);
+
+        LOGGER.dev("Length after adding: " + array.getLength());
+
+        LOGGER.dev("ToString: " + array.toString());
+
+        array.remove(5);
+
+        LOGGER.dev("Length after removing: " + array.getLength());
+
+        LOGGER.dev("--- Array Tests End ---");
 
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
