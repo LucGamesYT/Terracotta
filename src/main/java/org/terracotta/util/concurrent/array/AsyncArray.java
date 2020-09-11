@@ -92,6 +92,7 @@ public class AsyncArray<T> {
     public int getLength() {
         // sleep one ms because the future is too fast (when getLength is called directly after a change in the array)
         Thread.sleep(1);
+
         return this.length;
     }
 
