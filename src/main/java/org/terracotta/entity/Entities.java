@@ -14,17 +14,17 @@ import java.util.List;
  */
 public class Entities {
 
-    private static final List<Integer> usedRuntimeIds = new ArrayList<>();
+    private static final List<Long> usedRuntimeIds = new ArrayList<>();
 
-    public static void addUsedRuntimeId(final int runtimeId) {
+    public static void addUsedRuntimeId(final long runtimeId) {
         Entities.usedRuntimeIds.add(runtimeId);
     }
 
-    public static void releaseRuntimeId(final int runtimeId) {
-        Entities.usedRuntimeIds.remove(runtimeId - 1);
+    public static void releaseRuntimeId(final long runtimeId) {
+        Entities.usedRuntimeIds.remove(runtimeId - 1L);
     }
 
-    public static boolean isRuntimeIdUsed(final int runtimeId) {
+    public static boolean isRuntimeIdUsed(final long runtimeId) {
         return Entities.usedRuntimeIds.contains(runtimeId);
     }
 }

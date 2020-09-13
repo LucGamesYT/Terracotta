@@ -15,14 +15,12 @@ import org.terracotta.level.Vector3f;
  */
 public abstract class Entity {
 
-    protected int NETWORK_ID = -1;
-
     @Getter
-    private int runtimeId;
+    protected long id;
     @Getter
-    private Position position;
+    protected EntityType entityType;
     @Getter
-    private Vector3f velocity;
-
-    public abstract int getNetworkId();
+    protected Position position;
+    @Getter
+    protected Vector3f velocity;
 }
