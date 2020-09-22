@@ -33,7 +33,7 @@ public interface IBoundingBox extends Cloneable {
      * @param z        value which should be changed
      * @param decrease whether the BoundingBox should be decreased
      *
-     * @return a fresh increased {@link BoundingBox}
+     * @return a fresh size changed {@link BoundingBox}
      */
     BoundingBox changeSize(final float x, final float y, final float z, final boolean decrease);
 
