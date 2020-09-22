@@ -3,6 +3,7 @@ package org.terracotta.entity;
 import lombok.Getter;
 import org.terracotta.level.Position;
 import org.terracotta.level.Vector3f;
+import org.terracotta.util.math.BoundingBox;
 
 /**
  * Copyright (c) 2020, TerracottaMC and Kaooot
@@ -23,4 +24,6 @@ public abstract class Entity {
     protected Position position;
     @Getter
     protected Vector3f velocity;
+    @Getter
+    protected BoundingBox boundingBox;
 }
