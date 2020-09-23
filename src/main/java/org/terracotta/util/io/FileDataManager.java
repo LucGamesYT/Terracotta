@@ -35,6 +35,7 @@ public class FileDataManager {
                     FileDataManager.serverPropertiesMap.put("motd", "Terracotta Server v1.0.0");
                     FileDataManager.serverPropertiesMap.put("maxPlayers", 50);
                     FileDataManager.serverPropertiesMap.put("defaultGameMode", 0);
+                    FileDataManager.serverPropertiesMap.put("language", "eng");
                 }
                 break;
         }

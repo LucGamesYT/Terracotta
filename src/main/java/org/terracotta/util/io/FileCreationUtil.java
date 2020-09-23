@@ -77,7 +77,7 @@ public class FileCreationUtil {
 
                     int notNullProperties = 0;
 
-                    for (final String property : new String[]{"ip", "port", "motd", "maxPlayers", "defaultGameMode"}) {
+                    for (final String property : new String[]{"ip", "port", "motd", "maxPlayers", "defaultGameMode", "language"}) {
                         if (properties.getProperty(property) != null) {
                             notNullProperties++;
                         }
@@ -94,7 +94,7 @@ public class FileCreationUtil {
                         final StringBuilder contentsBuilder = new StringBuilder();
 
                         for (final Map.Entry<String, Object> entry : FileDataManager.getEntriesFromFile(ServerFile.PROPERTIES_SERVER)) {
-                            contentsBuilder.append(entry.getKey()).append(" = ").append(entry.getValue()).append("\n");
+                            contentsBuilder.append(entry.getKey()).append("=").append(entry.getValue()).append("\n");
                         }
 
                         fileWriter.write(contentsBuilder.toString());
